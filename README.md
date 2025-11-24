@@ -14,7 +14,7 @@ https://www.waveshare.com/esp32-s3-touch-lcd-7.htm
 ESP32-S3 7inch Capacitive Touch Display Development Board, ESP32 With Display, 800×480, 5-point Touch, 32-bit LX7 Dual-core Processor, Up to 240MHz Frequency, Supports WiFi & Bluetooth, With Onboard Antenna
 
 ## Code
-Complete example **[waveshare-esp32-s3-7inch_v2.yaml](waveshare-esp32-s3-7inch.yaml)**
+Complete example **[config.yaml](config.yaml)**
 Probably not nearly as optimal as you could do, but it seems to do the job as indented. 
 
 ## Credit
