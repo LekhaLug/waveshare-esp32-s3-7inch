@@ -1,0 +1,164 @@
+### Fonts
+#font:
+  - file: "fonts/RobotoCondensed-Regular.ttf"
+    id: roboto_56
+    size: 56
+    bpp: 4
+    glyphsets:
+      #- GF_Latin_Core
+      - GF_Cyrillic_Core
+    extras:
+      - file: "fonts/materialdesignicons-webfont.ttf"
+        glyphs: [
+          #"\U000F050F", # thermometer
+          #"\U000F10C3", # thermometer low
+          #"\U000F10C2", # thermometer high
+          "\U000F192D", # grid import
+          "\U000F19DD", # grid disabled
+          #"\U000F02D1", # mdi-heart
+          #"\U000F05F1", # ev-station
+          #"\U000F140B", # lightning bolt
+          "\U000F0425", # power
+          #"\U000F068A", # shield-home
+          "\U000F02DC", # home
+          #"\U000F1A91", # cash-clock
+          "\U000F0F54", # home-thermometer
+          "\U000F18D6", # sun-thermometer
+          #"\U000F1818", # bathtub
+          "\U000F1A43", # heat-pump
+          "\U000F0335", # lightbulb
+          "\U000F0336", # lightbulb_off
+          #"\U000F0769", # ceiling_light
+          #"\U000F0FA6", # car-seat-heater
+          #"\U000F1054", # outdoor-lamp 
+          #"\U000F1A85", # water-thermometer 
+          "\U000F1A45", # heat-wave
+          "\U000F0E02", # thermometer-chevron-down
+          #"\U000F0DA1", # transfer-down
+          "\U000F0E03", # thermometer-chevron-up
+          #"\U000F0DA3", # transfer-up
+          "\U000F0F9C", # home-import-outline
+          #"\U000F0F9B", # home-export-outline
+          #"\U000F0510", # thermometer-lines
+          "\U000F1402", # pump
+          #"\U000F0F92", # water boiler
+          "\U000F1A73", # solar panel
+          "\U000F0084", # battery charging
+          "\U000F0891", # thermostat
+          "\U000F0311", # return
+          ]
+
+  - file: "fonts/RobotoCondensed-Regular.ttf"
+    id: roboto_28
+    size: 28
+    bpp: 4
+    glyphsets:
+      #- GF_Latin_Core
+      - GF_Cyrillic_Core
+    extras:
+      - file: "fonts/materialdesignicons-webfont.ttf"
+        glyphs: [
+          #"\U000F050F", # thermometer
+          #"\U000F10C3", # thermometer low
+          #"\U000F10C2", # thermometer high
+          "\U000F192D", # grid import
+          #"\U000F02D1", # mdi-heart
+          #"\U000F05F1", # ev-station
+          #"\U000F140B", # lightning bolt
+          "\U000F0425", # power
+          #"\U000F068A", # shield-home
+          "\U000F02DC", # home
+          #"\U000F1A91", # cash-clock
+          "\U000F0F54", # home-thermometer
+          "\U000F18D6", # sun-thermometer
+          #"\U000F1818", # bathtub
+          "\U000F1A43", # heat-pump
+          "\U000F0335", # lightbulb
+          "\U000F0336", # lightbulb_off
+          #"\U000F0769", # ceiling_light
+          #"\U000F0FA6", # car-seat-heater
+          #"\U000F1054", # outdoor-lamp 
+          #"\U000F1A85", # water-thermometer 
+          "\U000F1A45", # heat-wave
+          "\U000F0E02", # thermometer-chevron-down
+          #"\U000F0DA1", # transfer-down
+          "\U000F0E03", # thermometer-chevron-up
+          #"\U000F0DA3", # transfer-up
+          "\U000F0F9C", # home-import-outline
+          #"\U000F0F9B", # home-export-outline
+          #"\U000F0510", # thermometer-lines
+          "\U000F1402", # pump
+          #"\U000F0F92", # water boiler
+          "\U000F1A73", # solar panel
+          "\U000F0084", # battery charging
+          "\U000F0891", # thermostat
+          "\U000F0311", # return
+          "\U000F0928", # Wifi signal from 100% to 75% or disable
+          "\U000F0925", # Wifi signal from 75% to 50%
+          "\U000F0922", # Wifi signal from 50% to 25%
+          "\U000F091F", # Wifi signal from 25% to 1%
+          ]
+
+  - file: "fonts/materialdesignicons-webfont.ttf"
+    id: icons_100
+    size: 100
+    bpp: 4
+    glyphs: [
+      "\U000F0594", # clear-night
+      "\U000F0590", # cloudy
+      "\U000F0F2F", # exceptional
+      "\U000F0591", # fog
+      "\U000F0592", # hail
+      "\U000F0593", # lightning
+      "\U000F067E", # lightning-rainy
+      "\U000F0595", # partlycloudy
+      "\U000F0596", # pouring
+      "\U000F0597", # rainy
+      "\U000F0598", # snowy
+      "\U000F067F", # snowy-rainy
+      "\U000F0599", # sunny
+      "\U000F059D", # windy
+      "\U000F059E", # windy-variant
+      "\U000F14E4", # sunny-off
+      "\U000F050F", # thermometer
+      ]
+
+### For future use ###
+  # - file: "fonts/materialdesignicons-webfont.ttf"
+  #   id: battery_icons_56
+  #   size: 56
+  #   bpp: 4
+  #   glyphs: [
+  #     "\U000F007A", # mdi-battery-10
+  #     "\U000F007B", # mdi-battery-20
+  #     "\U000F007C", # mdi-battery-30
+  #     "\U000F007D", # mdi-battery-40
+  #     "\U000F007E", # mdi-battery-50
+  #     "\U000F007F", # mdi-battery-60
+  #     "\U000F0080", # mdi-battery-70
+  #     "\U000F0081", # mdi-battery-80
+  #     "\U000F0082", # mdi-battery-90
+  #     "\U000F0079", # mdi-battery (full)
+  #     "\U000F008E", # mdi-battery-outline
+  #     "\U000F0091", # mdi-battery-unknown
+  #     ]
+
+  # NOT USED AT THE MOMENT
+  # - file: "gfonts://Roboto"
+  #   id: roboto20
+  #   size: 20
+  #   bpp: 4
+
+  # - file: "fonts/RobotoCondensed-Regular.ttf"
+  #   id: roboto_36
+  #   size: 36
+  #   bpp: 4
+  #   extras:
+  #     - file: "fonts/materialdesignicons-webfont.ttf"
+  #       glyphs: [
+  #         "\U000F050F", # thermometer
+  #         "\U000F10C3", # thermometer low
+  #         "\U000F10C2", # thermometer high
+  #         "\U000F192D", # grid import
+  #         "\U000F02D1", # mdi-heart
+  #         ]

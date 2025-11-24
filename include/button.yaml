@@ -1,0 +1,21 @@
+### Restart unit
+# button:
+#   - platform: restart
+#     name: $friendly_name Restart
+#     id: id_button_device_restart
+
+  # - platform: template
+  #   name: "Wake Up Device"
+  #   on_press:
+  #     - if:
+  #         condition:
+  #           not:
+  #             - script.is_running: id_script_blink_quit_icon
+  #         then:
+  #           - if:
+  #               condition: lvgl.is_paused
+  #               then:
+  #                 - logger.log: "LVGL resuming"
+  #                 - lvgl.resume:
+  #                 - lvgl.widget.redraw:
+  #           - script.execute: id_script_backlight_timeout

@@ -1,0 +1,9 @@
+*.pyc
+# Виключити secrets.yaml
+secrets.yaml
+
+# Виключити папку .esphome
+.esphome/
+
+# Виключити папку .vscode
+.vscode/

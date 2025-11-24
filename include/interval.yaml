@@ -1,0 +1,199 @@
+# # Intentionally left emptyinterval:
+interval:
+  - interval: 3s
+    then:
+      - lambda: |-
+          esphome::Color bgcolor;
+          uint8_t red, green, blue ;
+          lv_color_t lvcol = id(grid_voltage_sensor).state > 50
+            ? lv_color_hex(0x00FF00)   
+            : lv_color_hex(0x708090); 
+            //FF0000
+          // RGB565 → RGB888 конвертація
+          red   = (lvcol.ch.red   * 255 + 15) / 31;  // 5 біт → 8 біт
+          green = (((lvcol.ch.green_h << 3) | lvcol.ch.green_l) * 255 + 31) / 63; // 6 біт → 8 біт
+          blue  = (lvcol.ch.blue  * 255 + 15) / 31;  // 5 біт → 8 біт
+          bgcolor = esphome::Color(red, green, blue);
+          lv_obj_set_style_text_color(
+            id(grid_power_icon), bgcolor,
+            LV_PART_MAIN | LV_STATE_DEFAULT
+          );
+          lv_obj_set_style_text_color(
+            id(grid_voltage_text), bgcolor,
+            LV_PART_MAIN | LV_STATE_DEFAULT
+          );
+          lv_label_set_text(grid_power_icon, id(grid_voltage_sensor).state > 50
+            ? "\U000F192D"  // grid enabled   
+            : "\U000F19DD" ); // grid disabled
+          // detect PV power and set pv icon color
+          lvcol = id(pv_power_sensor).state > 20
+            ? lv_color_hex(0xFFFF00)
+            : lv_color_hex(0xCCCCCC);
+          // RGB565 → RGB888 конвертація
+          red   = (lvcol.ch.red   * 255 + 15) / 31;  // 5 біт → 8 біт
+          green = (((lvcol.ch.green_h << 3) | lvcol.ch.green_l) * 255 + 31) / 63; // 6 біт → 8 біт
+          blue  = (lvcol.ch.blue  * 255 + 15) / 31;  // 5 біт → 8 біт
+
+          bgcolor = esphome::Color(red, green, blue);
+          lv_obj_set_style_text_color(
+            id(pv_power_icon), bgcolor,
+            LV_PART_MAIN | LV_STATE_DEFAULT
+          );
+          // detect battery voltage and setbat icon color
+          float bat_voltage = id(bat_voltage_sensor).state;
+          if (bat_voltage > 53.5) {
+            lvcol = lv_color_hex(0x00FF00);      // green 
+          } else if (bat_voltage > 52.5) {
+            lvcol = lv_color_hex(0x88FF00);      // light green  
+          } else if (bat_voltage > 52.0) {
+            lvcol = lv_color_hex(0xFFFF00);      // yellow
+          } else if (bat_voltage > 51.0) {
+            lvcol = lv_color_hex(0xFF8800);      // orange
+          } else {
+            lvcol = lv_color_hex(0xFF0000);      // red
+          };
+          // RGB565 → RGB888 конвертація
+          red   = (lvcol.ch.red   * 255 + 15) / 31;  // 5 біт → 8 біт
+          green = (((lvcol.ch.green_h << 3) | lvcol.ch.green_l) * 255 + 31) / 63; // 6 біт → 8 біт
+          blue  = (lvcol.ch.blue  * 255 + 15) / 31;  // 5 біт → 8 біт
+
+          bgcolor = esphome::Color(red, green, blue);
+          lv_obj_set_style_text_color(
+            id(bat_power_icon), bgcolor,
+            LV_PART_MAIN | LV_STATE_DEFAULT
+          );
+          lv_obj_set_style_text_color(
+            id(bat_voltage_text), bgcolor,
+            LV_PART_MAIN | LV_STATE_DEFAULT
+          );          
+          int rssi = id(wifi_signal_sensor).state;
+          std::string icon;
+          if (rssi > -60) {
+            icon = "\U000F0928";  // сильный
+          } else if (rssi > -70) {
+            icon = "\U000F0925";  // средний
+          } else if (rssi > -80) {
+            icon = "\U000F0922";  // слабый
+          } else {
+            icon = "\U000F091F";  // нет сигнала
+          }
+          lv_label_set_text(id(wifi_icon), icon.c_str());
+
+
+      - lvgl.label.update:
+          id: grid_power_text            
+          text: !lambda |-
+            char buf[16];
+            sprintf(buf, "%.2F", id(grid_power_sensor).state/1000);
+            return std::string(buf);
+
+      - lvgl.label.update:
+          id: grid_voltage_text            
+          text: !lambda |-
+            char buf[16];
+            sprintf(buf, "%.0FV", id(grid_voltage_sensor).state);
+            return std::string(buf);
+
+      - lvgl.label.update:
+          id: pv_power_text
+          text: !lambda |-
+            char buf[16];
+            sprintf(buf, "%.2f", id(pv_power_sensor).state/1000);
+            return std::string(buf);
+      - lvgl.label.update:
+          id: bat_power_text
+          text: !lambda |-
+            char buf[16];
+            sprintf(buf, "%.2f", id(bat_power_sensor).state/1000);
+            return std::string(buf);
+
+      - lvgl.label.update:
+          id: load_power_text
+          text: !lambda |-
+            char buf[16];
+            sprintf(buf, "%.2f", id(load_power_sensor).state/1000);
+            return std::string(buf);
+
+      - script.execute:
+          id: apply_power_color
+          power: !lambda 'return id(grid_power_sensor).state;'
+
+      - lvgl.arc.update:
+          id : grid_power_slider
+          value: !lambda |-
+              float power = id(grid_power_sensor).state;
+              return std::max(0.0f, std::min(6000.0f, power));
+          indicator:
+            arc_color: !lambda |-
+              return lv_color_hex(id(power_color));
+
+      - script.execute:
+          id: apply_power_color
+          power: !lambda 'return id(pv_power_sensor).state;'
+
+      - lvgl.arc.update:
+          id : pv_power_slider
+          # animated: false
+          value: !lambda |-
+              float power = id(pv_power_sensor).state;
+              return std::max(0.0f, std::min(6000.0f, power));
+          indicator:
+            arc_color: !lambda |-
+              return lv_color_hex(id(power_color));
+
+
+      - script.execute:
+          id: apply_power_color
+          power: !lambda 'return id(bat_power_sensor).state;'
+
+      - lvgl.arc.update:
+          id : bat_power_slider
+          value: !lambda |-
+              float power = id(bat_power_sensor).state;
+              return std::max(0.0f, std::min(6000.0f, power));
+          indicator:
+            arc_color: !lambda |-
+              return lv_color_hex(id(power_color));
+
+      - script.execute:
+          id: apply_power_color
+          power: !lambda 'return id(load_power_sensor).state;'
+
+      - lvgl.arc.update:
+          id : load_power_slider
+          # animated: false
+          value: !lambda |-
+              float power = id(load_power_sensor).state;
+              return std::max(0.0f, std::min(6000.0f, power));
+          indicator:
+            arc_color: !lambda |-
+              return lv_color_hex(id(power_color));
+    
+
+  # - interval: 60s
+  #   then:
+  #     - lambda: |-
+  #         id(heap_value) = static_cast<int>(ESP.getFreeHeap());
+
+  #         auto now = id(esptime).now();
+  #         int hour = now.hour;
+  #         int theme = 0;
+  #         if (hour >= 6 && hour < 12) theme = 1;        // Ранок
+  #         else if (hour >= 12 && hour < 18) theme = 2;   // День
+  #         else if (hour >= 18 && hour < 22) theme = 3;   // Вечір
+  #         else theme = 4;                                // Ніч
+
+  #         if (theme != id(current_theme)) {
+  #           id(current_theme) = theme;
+  #           lv_color_t top, bottom;
+  #           switch(theme) {
+  #             case 1: top = lv_color_hex(0xffd6a5); bottom = lv_color_hex(0xaee2ff); break; // Ранок
+  #             case 2: top = lv_color_hex(0x89cff0); bottom = lv_color_hex(0xffffff); break; // День
+  #             case 3: top = lv_color_hex(0xffa07a); bottom = lv_color_hex(0x1e3c72); break; // Вечір
+  #             case 4: top = lv_color_hex(0x0f111a); bottom = lv_color_hex(0x000000); break; // Ніч
+  #           }
+  #           lv_obj_set_style_bg_color(id(bg_rect), top, LV_PART_MAIN );
+  #           lv_obj_set_style_bg_grad_color(id(bg_rect), bottom, LV_PART_MAIN );
+  #           //lv_obj_set_style_bg_grad_dir(id(bg_rect), LV_DIR_VER, LV_PART_MAIN);
+  #          }
+  #         ESP_LOGI("Theme ", "hour:%d, theme:%d, ", hour, theme);        

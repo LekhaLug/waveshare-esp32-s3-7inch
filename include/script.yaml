@@ -1,0 +1,44 @@
+script:
+
+  - id: send_target_temp
+    then:
+      - homeassistant.service:
+          service: climate.set_temperature
+          data:
+            entity_id: ${climate_entity}
+            temperature: !lambda "return id(target_temp);"
+      - lambda: |-
+          ESP_LOGI ( "send_target_temp ", "%.1f", id ( target_temp ) );                     
+
+
+  - id: apply_power_color  # calc indicator color of power arc
+    parameters:
+      power: float
+    then:
+      - lambda: |-
+          //lv_color_t lvcol; 
+          uint32_t int_color; 
+          float p = std::max(0.0f, std::min(8000.0f, abs(power)));
+          if (p < 2000) {
+            int_color = 0x00FF00;
+            // lvcol = lv_color_hex(0x00FF00);      // green 
+          } else if (p < 3000) {
+            int_color = 0x88FF00;
+            // lvcol = lv_color_hex(0x88FF00);      // green-yellow  
+          } else if (p < 4000) {
+            int_color = 0xFFFF00;
+            // lvcol = lv_color_hex(0xFFFF00);      // yellow
+          } else if (p < 5000) {
+            int_color = 0xFF4400;
+            // lvcol = lv_color_hex(0xFF4400);      // orange
+          } else {
+            int_color = 0xFF0000;
+            // lvcol = lv_color_hex(0xFF0000);      // red
+          };
+          // RGB565 → RGB888 конвертація
+          id(power_color) = int_color;
+          // uint8_t red   = (lvcol.ch.red   * 255 + 15) / 31;  // 5 біт → 8 біт
+          // uint8_t green = (((lvcol.ch.green_h << 3) | lvcol.ch.green_l) * 255 + 31) / 63; // 6 біт → 8 біт
+          // uint8_t blue  = (lvcol.ch.blue  * 255 + 15) / 31;  // 5 біт → 8 біт
+          // id(power_color) = esphome::Color(red, green, blue);
+                    

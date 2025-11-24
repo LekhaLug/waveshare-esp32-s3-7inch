@@ -1,0 +1,76 @@
+
+### Text sensors ## Not used
+
+text_sensor:
+
+  - platform: homeassistant
+    id: current_condition
+    entity_id: weather.forecast_home
+    internal: True
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_weather_forecast_condition_name
+            text: !lambda |-
+              ESP_LOGI("Weather condition: ", id(current_condition).state.c_str());
+              return id(current_condition).state.c_str();
+              // if (id(current_condition).state == "sunny") return "сонячно";
+              // else if (id(current_condition).state == "clear-night") return "зоряна ніч";
+              // else if (id(current_condition).state == "cloudy") return "хмари"; 
+              // else if (id(current_condition).state == "exceptional") return "виняток";
+              // else if (id(current_condition).state == "fog") return "туман";
+              // else if (id(current_condition).state == "hail") return "град";
+              // else if (id(current_condition).state == "lightning") return "гроза";
+              // else if (id(current_condition).state == "lightning-rainy") return "грозові дощі";
+              // else if (id(current_condition).state == "partlycloudy") return "хмарно з проясн";
+              // else if (id(current_condition).state == "pouring") return "ливень";
+              // else if (id(current_condition).state == "rainy") return "дощ";
+              // else if (id(current_condition).state == "snowy") return "сніг";
+              // else if (id(current_condition).state == "snowy-rainy") return "хуртовина";
+              // else if (id(current_condition).state == "windy") return "вітряно";
+              // else if (id(current_condition).state == "windy-variant") return "пориви вітру";
+              // else if (id(current_condition).state == "sunny-off") return "нема сонця";
+              // else return "невідомо";
+            # format: "%s"
+            # args: [id(current_condition).state.c_str()]
+        - lvgl.label.update: 
+            id: lbl_weather_forecast_condition_icon
+            text: !lambda |-
+              ESP_LOGI("Weather condition: ", id(current_condition).state.c_str());
+              if (id(current_condition).state == "sunny") return "\U000F0599";
+              else if (id(current_condition).state == "clear-night") return "\U000F0594";
+              else if (id(current_condition).state == "cloudy") return "\U000F0590"; 
+              else if (id(current_condition).state == "exceptional") return "\U000F0F2F";
+              else if (id(current_condition).state == "fog") return "\U000F0591";
+              else if (id(current_condition).state == "hail") return "\U000F0592";
+              else if (id(current_condition).state == "lightning") return "\U000F0593";
+              else if (id(current_condition).state == "lightning-rainy") return "\U000F067E";
+              else if (id(current_condition).state == "partlycloudy") return "\U000F0595";
+              else if (id(current_condition).state == "pouring") return "\U000F0596";
+              else if (id(current_condition).state == "rainy") return "\U000F0597";
+              else if (id(current_condition).state == "snowy") return "\U000F0598";
+              else if (id(current_condition).state == "snowy-rainy") return "\U000F067F";
+              else if (id(current_condition).state == "windy") return "\U000F059D";
+              else if (id(current_condition).state == "windy-variant") return "\U000F059E";
+              else if (id(current_condition).state == "sunny-off") return "\U000F14E4";
+              else return "\U0000F0599";
+        # - lvgl.label.update:
+        #     id: label_cond_icon
+            text_color: !lambda |-
+              if (id(current_condition).state == "sunny") return lv_color_hex(0xFFFF00); 
+              else if (id(current_condition).state == "lightning-rainy") return lv_color_hex(0x0000FF);
+              else if (id(current_condition).state == "rainy") return lv_color_hex(0x00FFFF);
+              else return lv_color_hex(0xFFFFFF);
+
+  # - platform: homeassistant
+  #   id: ha_hvac_mode
+  #   entity_id: ${climate_entity}
+  #   attribute: hvac_mode
+  #   on_value:
+  #     - lambda: |-
+  #         // оновлюємо напис на кнопці
+  #         if (x == "off") {
+  #           lv_label_set_text(id(lbl_thermostat), "Turn ON");
+  #         } else {
+  #           lv_label_set_text(id(lbl_thermostat), "Turn OFF");
+  #         }              

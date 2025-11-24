@@ -1,0 +1,6 @@
+### Images
+#image:
+  - file: "images/background.png"
+    id: background
+    # resize: 480x320
+    type: RGB565

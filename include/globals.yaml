@@ -1,0 +1,23 @@
+# Intentionally left empty
+globals:
+  # - id: current_theme
+  #   type: int
+  #   restore_value: no
+  #   initial_value: '0'
+
+  - id: target_temp
+    type: float
+    restore_value: true
+    initial_value: '22.0'
+
+  - id: power_color
+    type: uint32_t
+    restore_value: yes
+    initial_value: '0xFFAA33'
+
+  # - id: heap_value
+  #   type: int
+  #   restore_value: no
+  #   initial_value: '0'
+
+

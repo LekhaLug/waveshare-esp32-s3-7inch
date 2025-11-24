@@ -1,0 +1,1018 @@
+font: !include fonts.yaml
+#image: !include images.yaml
+color: !include colors.yaml
+
+### LVGL Graphics
+lvgl:
+  id: screen
+  log_level: none #INFO
+  buffer_size: 10%  #25%
+  bg_color: my_gray
+  disp_bg_color: my_black
+  bg_grad_dir: VER
+  # bg_color: 0x0f111a
+  # bg_grad_color: 0x000000
+ # disp_bg_image: background
+  color_depth: 16
+  bg_opa: TRANSP
+  default_font: roboto_56
+  style_definitions:
+    - id: standard_style
+      text_color: my_white
+      radius: 0
+
+  theme:
+    arc:
+      scroll_on_focus: true
+      arc_color: my_gray
+      width: 120
+      height: 120
+      arc_width: 12
+      indicator:
+        arc_color: 0x00FF00
+        arc_width: 10
+        arc_rounded: true
+        pad_all: 1
+
+    slider:
+      scroll_on_focus: false # true
+      width: 140
+      indicator:
+        bg_grad: slider_bar
+      knob: 
+          bg_opa: 0
+    button:
+      bg_color: 0x4D93DD
+      bg_grad_dir: VER
+      bg_opa: COVER
+      border_color: 0x0077b3
+      border_width: 2
+      pressed: # set some button colors to be different in pressed state
+        bg_color: 0xFFD512
+      checked: # set some button colors to be different in checked state
+        bg_color: 0xF53B3B
+        text_color: 0xfff300
+      scroll_on_focus: true
+      text_font: roboto_56
+      text_color: my_white
+      focused:
+        border_color: my_gray
+    label:
+      # outline_width: 1 ## for testing the grid, comment out when done
+      text_font: roboto_56
+      text_color: my_white
+
+  gradients:
+    - id: color_bar
+      direction: ver
+      dither: none
+      stops:
+        - color: 0x4D93DD
+          position: 0%
+        - color: 0x4BDCE3
+          position: 20%
+        - color: 0xA1EDDE
+          position: 40%
+        - color: 0xEFF2B1
+          position: 60%
+        - color: 0xFFD512
+          position: 80%
+        - color: 0xF53B3B
+          position: 100%
+
+    - id: slider_bar
+      direction: hor
+      dither: none
+      stops:
+        - color: 0x3cff00ff
+          position: 0%
+        - color: 0x3cff00ff
+          position: 20%
+        - color: 0x3cff00ff
+          position: 40%
+        - color: 0xffc400ff
+          position: 60%
+        - color: 0xff9900ff
+          position: 80%
+        - color: 0xff0000ff
+          position: 100%
+  pages:
+    - id: main_page
+      bg_color: my_black
+    ## Widgets spaced in a 8x5 grid
+      widgets:
+        - obj: ## one big object first
+            id: bg_rect
+            align: TOP_LEFT
+            width: 800
+            height: 480
+            pad_all: 6
+            radius: 0
+            bg_color: 0x0f111a
+            bg_grad_color: 0x000000
+            bg_grad_dir: VER
+            bg_opa: 100%
+            border_opa: TRANSP
+
+
+            layout: # enable the GRID layout 
+              type: GRID # split the rows and the columns
+              grid_columns: [FR(80), FR(80), FR(80), FR(145), FR(83), FR(83), FR(83), FR(83), FR(83),] # 8 columns divided in pixels, plan is a 2x5 columns divided in one 3x5 and one 5x5
+              grid_rows: [FR(85), FR(146), FR(83), FR(83), FR(83)] # 5 rows divided in pixels
+            widgets:
+              # 1st Column 3x5 ## Remeber columns and rows numbering start at 0 
+              - label:
+                  id: homeassistant_time_text
+                  pad_left: 12
+                  grid_cell_row_pos: 0 # 1st row
+                  grid_cell_column_pos: 0 # 1st column
+                  grid_cell_column_span: 4 # column 0,1,2 span about half the screen (80+80+215)
+                  grid_cell_x_align: START
+                  grid_cell_y_align: CENTER
+
+              - label:
+                  text: "\U000F14E4" # Weather icon
+                  id: lbl_weather_forecast_condition_icon
+                  text_font: icons_100
+                  text_align: CENTER
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 0
+                  grid_cell_column_span: 2 # span first 2
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  text: "Unknown" 
+                  id: lbl_weather_forecast_condition_name 
+                  text_align: LEFT
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 2
+                  grid_cell_column_span: 4 # span into next side of the screen
+                  grid_cell_x_align: START
+                  grid_cell_y_align: CENTER
+
+              - label:
+                  text: "\U000F18D6" # Outdoor temp icon
+                  text_align: CENTER
+                  pad_top: 5
+                  grid_cell_row_pos: 2
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: outdoor_temperature_text
+                  text_align: LEFT
+                  grid_cell_row_pos: 2
+                  grid_cell_column_pos: 1
+                  grid_cell_column_span: 2
+                  grid_cell_x_align: START
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: outdoor_humidity_text
+                  text_align: LEFT
+                  grid_cell_row_pos: 2
+                  grid_cell_column_pos: 3
+                  grid_cell_x_align: START
+                  grid_cell_y_align: CENTER
+
+              - label:
+                  text: "\U000F0F54" # Indoor temp icon
+                  text_align: CENTER
+                  pad_top: 5
+                  grid_cell_row_pos: 3
+                  grid_cell_column_pos: 0
+                  grid_cell_row_span: 2
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: indoor_temperature_text
+                  text_align: LEFT
+                  grid_cell_row_pos: 3
+                  grid_cell_column_pos: 1
+                  grid_cell_column_span: 2
+                  grid_cell_x_align: START
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: indoor_humidity_text
+                  text_align: LEFT
+                  grid_cell_row_pos: 3
+                  grid_cell_column_pos: 3
+                  grid_cell_x_align: START
+                  grid_cell_y_align: CENTER
+
+              # - label:
+              #     text: "\U000F0F54" # Water temp
+              #     text_align: CENTER
+              #     pad_top: 5
+              #     grid_cell_row_pos: 4
+              #     grid_cell_column_pos: 0
+              #     grid_cell_x_align: CENTER
+              #     grid_cell_y_align: CENTER
+              - label:
+                  id: indoor_temperature_text2 
+                  text_align: LEFT
+                  grid_cell_row_pos: 4
+                  grid_cell_column_pos: 1
+                  grid_cell_column_span: 2
+                  grid_cell_x_align: START
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: indoor_humidity_text2 
+                  text_align: LEFT
+                  grid_cell_row_pos: 4
+                  grid_cell_column_pos: 3
+                  grid_cell_x_align: START
+                  grid_cell_y_align: CENTER
+
+              - label:
+                  id: thermostat_target_temp 
+                  text_align: LEFT
+                  grid_cell_row_pos: 3
+                  grid_cell_column_pos: 4
+                  grid_cell_column_span: 3
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+                  text: "X°C"         
+                  
+              - led:
+                  id: led_thermostat_status
+                  align: CENTER
+                  color: 0x708090
+                  brightness: 70%     
+                  grid_cell_row_pos: 3
+                  grid_cell_column_pos: 4
+                  grid_cell_column_span: 3
+                  grid_cell_x_align: START
+                  grid_cell_y_align: CENTER
+
+              ## decrease temp
+              - button:
+                  id: btn_dec_temp
+                  text_align: CENTER
+                  grid_cell_row_pos: 4
+                  grid_cell_column_pos: 4
+                  grid_cell_x_align: STRETCH
+                  grid_cell_y_align: STRETCH
+                  widgets:
+                    - label:
+                        # id: lbl_xxxxxxx
+                        pad_top: 4
+                        align: center
+                        text: "\U000F0E02" # thermometer-chevron-down
+                  on_click:
+                    then:
+                      - lambda: |-
+                          float temp = std::round(id(target_temp) * 2.0f) / 2.0f;  // round to 0.5
+                          temp -= 0.5;
+                          if (temp < 10) temp = 10;
+                          id(target_temp) = temp;
+                          ESP_LOGI ( "upd_target_temp ", "%.1f", id(target_temp) );  
+                          // lvgl::label_set_text_fmt(id(thermostat_target_temp), "%.1f °C", (double)id(target_temp));
+                      - lvgl.label.update:
+                          id: thermostat_target_temp 
+                          text:
+                            format: '%.1f °C'
+                            args: [ 'id(target_temp)' ]
+                      - script.execute: send_target_temp
+              - button:
+                  id: btn_thermostat_sw
+                  checkable: true
+                  text_align: CENTER
+                  grid_cell_row_pos: 4
+                  grid_cell_column_pos: 5
+                  grid_cell_x_align: STRETCH
+                  grid_cell_y_align: STRETCH
+                  # on_click:
+                  #   then:
+                  #     - lvgl.page.show:
+                  #         id: main_page
+                  #         animation: FADE_OUT
+                  #         time: 100ms                         
+                  #     - lvgl.page.show:
+                  #         id: climate_page
+                  #         animation: FADE_IN
+                  #         time: 100ms      
+                  widgets:
+                    - label:
+                        align: center
+                        text: "\U000F0891" # thermostat
+                  on_click:
+                    then:
+                      if: 
+                        condition:
+                          switch.is_on: switch_thermostat
+                        then:
+                          - switch.turn_off: switch_thermostat
+                          - lvgl.led.update:
+                              id: led_thermostat_status
+                              color: 0x708090
+                        else:
+                          - switch.turn_on: switch_thermostat
+                          - lvgl.led.update:
+                              id: led_thermostat_status
+                              color: 0xFF0000
+
+                      # - lambda: |-
+                      #     if (id(switch_thermostat).state) {
+                      #       id(switch_thermostat).turn_off();
+                      #     } else {
+                      #       id(switch_thermostat).turn_on();
+                      #     }
+
+
+              ## increase temp
+              - button:
+                  id: btn_inc_temp
+                  text_align: CENTER
+                  grid_cell_row_pos: 4
+                  grid_cell_column_pos: 6
+                  grid_cell_x_align: STRETCH
+                  grid_cell_y_align: STRETCH
+                  widgets:
+                    - label:
+                        # id: lbl_xxxxxxx
+                        pad_top: 4
+                        align: center
+                        text: "\U000F0E03" # thermometer-chevron-up
+                  on_click:
+                    then:
+                      - lambda: |-
+                          float temp = std::round(id(target_temp) * 2.0f) / 2.0f;  // round to 0.5
+                          temp += 0.5;
+                          if (temp > 30) temp = 30;
+                          id(target_temp) = temp;
+                      - lvgl.label.update:
+                          id: thermostat_target_temp 
+                          text:
+                            format: '%.1f °C'
+                            args: [ 'id(target_temp)' ]
+                      - script.execute: send_target_temp
+              - label:
+                  id: lbl_ram 
+                  text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  text: ""
+                  grid_cell_row_pos: 3
+                  grid_cell_column_pos: 8
+                  grid_cell_x_align: END
+                  grid_cell_y_align: CENTER       
+              - label:
+                  id: lbl_psram 
+                  text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  text: ""
+                  grid_cell_row_pos: 3
+                  grid_cell_column_pos: 7
+                  grid_cell_x_align: END
+                  grid_cell_y_align: CENTER       
+              # - button:
+              #     checkable: true
+              #     text_align: CENTER
+              #     grid_cell_row_pos: 3
+              #     #grid_cell_row_span: 3
+              #     grid_cell_column_pos: 8
+              #     #grid_cell_column_span: 2
+              #     grid_cell_x_align: STRETCH
+              #     grid_cell_y_align: STRETCH
+              #     on_click:
+              #       then:
+              #         - lvgl.page.show:
+              #             id: main_page
+              #             animation: FADE_OUT
+              #             time: 100ms                         
+              #         - lvgl.page.show:
+              #             id: test_page
+              #             animation: FADE_IN
+              #             time: 100ms      
+              #     widgets:
+              #       - label:
+              #           id: test_label
+              #           text: "test"
+              #           text_font: roboto_28
+              ## Hot water circulation 
+              - button:
+                  id: btn_pump_switch
+                  checkable: true
+                  text_align: CENTER
+                  grid_cell_row_pos: 4
+                  grid_cell_column_pos: 7
+                  grid_cell_x_align: STRETCH
+                  grid_cell_y_align: STRETCH
+                  widgets:
+                    - label:
+                        # id: lbl_xxxxxxx
+                        pad_top: 4
+                        align: center
+                        text: "\U000F1402" # pump
+                  # on_change:
+                  on_click:
+                    - homeassistant.service:
+                        service: switch.toggle
+                        data:
+                          entity_id: 'switch.vimikach_nasosika'
+
+
+              ## Car heater button 
+              - button:
+                  id: btn_boiler
+                  checkable: true
+                  text_align: CENTER
+                  grid_cell_row_pos: 4
+                  grid_cell_column_pos: 8
+                  grid_cell_x_align: STRETCH
+                  grid_cell_y_align: STRETCH
+                  widgets:
+                    - label:
+                        # id: lbl_car_heater
+                        pad_top: 4
+                        align: CENTER
+                        text: "\U000F1A45" # heat wave
+                  #on_change:
+                  on_click:
+                    - homeassistant.service:
+                        service: switch.toggle
+                        data:
+                          entity_id: 'switch.vimikach_boilera'
+
+
+              # ## Extra hot water from the heat pump 
+              # - button:
+              #     text_align: CENTER
+              #     grid_cell_row_pos: 4
+              #     grid_cell_column_pos: 8
+              #     grid_cell_x_align: STRETCH
+              #     grid_cell_y_align: STRETCH
+              #     id: btn_bathtub
+              #     # checkable: true #only chage when it gets it from home assistant, not from the LVGL-panel
+              #     widgets:
+              #       - label:
+              #           id: lbl_bathtub
+              #           pad_top: 4
+              #           align: CENTER
+              #           text: "\U000F1818" # bathtub
+              #     on_long_press:
+              #       - homeassistant.action:
+              #           action: select.select_last # a one time increase of the hot water temperature to 55 degrees C
+              #           data:
+              #             entity_id: select.temporary_lux_48132
+              #     on_press:
+              #       - homeassistant.action:
+              #           action: select.select_first # selects OFF in the list, heat pumps goes back to normal operation (45-48 degrees)
+              #           data:
+              #             entity_id: select.temporary_lux_48132
+
+        - obj: ## second object up to the right
+            align: TOP_RIGHT
+            width: 280 ## 
+            height: 280 ##  
+            pad_all: 5
+            radius: 0
+            bg_color: my_black
+            bg_opa: TRANSP # complete transparent since this is ontop of the first object
+            border_opa: TRANSP
+            layout: # enable the GRID layout 
+              pad_column: 10
+              type: GRID # split the rows and the columns into a 2x4 grid
+              grid_columns: [FR(1), FR(1)] # 2 columns equal 
+              grid_rows: [FR(1), FR(1)] #  rows equal
+            widgets: 
+              - arc:
+                  id : pv_power_slider
+                  adjustable: False
+                  max_value: 6000
+                  grid_cell_row_pos: 0
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: pv_power_icon 
+                  #text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  text: "\U000F1A73"
+                  grid_cell_row_pos: 0
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: pv_power_text # Return temp
+                  text_font: roboto_28
+                  text_align: LEFT
+                  grid_cell_row_pos: 0
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: END
+              # - label:
+              #     text_font: roboto_28
+              #     id: supply_temp_text # Supply temp
+              #     text_align: LEFT
+              - arc:
+                  id : bat_power_slider
+                  max_value: 6000
+                  adjustable: False
+              # - label:
+              #     text_font: roboto_28
+              #     id: brine_in_temp_text # Brine in
+              #     text_align: LEFT
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  #text_font: roboto_28
+                  id: bat_power_icon # Brine out
+                  text_align: LEFT
+                  text_color: 0x00FF00
+                  text: "\U000F0084"
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: bat_power_text # Brine out
+                  text_font: roboto_28
+                  text_align: LEFT
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: END
+              - label:
+                  id: bat_voltage_text # Brine out
+                  text_font: montserrat_12 # roboto_28
+                  text_align: RIGHT
+                  text_color: my_white
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: END
+                  grid_cell_y_align: end
+              - arc:
+                  id : grid_power_slider
+                  max_value: 6000
+                  adjustable: False
+              # - label:
+              #     text_font: roboto_28
+              #     id: compressor_frequency_text # Compressor frequency
+              #     text_align: LEFT
+                  grid_cell_row_pos: 0
+                  grid_cell_column_pos: 1 
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: grid_power_icon # Brine out
+                  #text_font: roboto_28
+                  text_align: LEFT
+                  text: "\U000F192D"
+                  text_color: my_gray
+                  grid_cell_row_pos: 0
+                  grid_cell_column_pos: 1
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: grid_power_text 
+                  text_font: roboto_28
+                  text_align: LEFT
+                  grid_cell_row_pos: 0
+                  grid_cell_column_pos: 1
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: END
+              - label:
+                  id: grid_voltage_text # Brine out
+                  text_font: montserrat_12 # roboto_28
+                  text_align: RIGHT
+                  text_color: my_white
+                  grid_cell_row_pos: 0
+                  grid_cell_column_pos: 1
+                  grid_cell_x_align: END
+                  grid_cell_y_align: END
+
+              - label:
+                  id: wifi_icon
+                  text_font: roboto_28
+                  text: $wifi_25  # начальный символ
+                  grid_cell_row_pos: 0
+                  grid_cell_column_pos: 1
+                  grid_cell_x_align: END
+                  grid_cell_y_align: START
+
+              - arc:
+                  id : load_power_slider
+                  max_value: 6000
+                  adjustable: False
+              # - label:
+              #     text_font: roboto_28
+              #     id: degree_minutes_text # Degree minutes... needs some extra space, can go below -1000 and take up 5 characters + symbol and space
+              #     text_align: LEFT
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 1
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: load_power_icon # Brine out
+                  #text_font: roboto_28
+                  text_align: LEFT
+                  text_color: 0x00FF00
+                  text: "\U000F0F9C"
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 1
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: load_power_text 
+                  text_font: roboto_28
+                  text_align: LEFT
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 1
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: END
+        - obj: ## для нажатия
+            align: TOP_RIGHT
+            width: 280 ## 
+            height: 280 ##  
+            pad_all: 5
+            radius: 0
+            bg_color: my_black
+            bg_opa: TRANSP # complete transparent since this is ontop of the first object
+            border_opa: TRANSP
+            on_click:
+              then:
+                - lvgl.label.update:
+                    id: td_pv_power_text
+                    text:
+                      format: '%.1fkWH'
+                      args: [ 'id(pv_power_today).state' ]
+                - lvgl.label.update:
+                    id: tot_pv_power_text
+                    text:
+                      format: '%.2fMWH'
+                      args: [ 'id(pv_power_total).state / 1000' ]
+                - lvgl.label.update:
+                    id: td_load_power_text
+                    text:
+                      format: '%.1fkWH'
+                      args: [ 'id(load_power_today).state' ]
+                - lvgl.label.update:
+                    id: tot_load_power_text
+                    text:
+                      format: '%.2fMWH'
+                      args: [ 'id(load_power_total).state / 1000' ]
+                - lvgl.label.update:
+                    id: td_grid_power_text
+                    text:
+                      format: '%.1fkWH'
+                      args: [ 'id(grid_power_today).state' ]
+                - lvgl.label.update:
+                    id: tot_grid_power_text
+                    text:
+                      format: '%.2fMWH'
+                      args: [ 'id(grid_power_total).state / 1000' ]
+                - lvgl.label.update:
+                    id: td_bat_power_text
+                    text:
+                      format: '%.1fkWH'
+                      args: [ '(id(bat_chpower_today).state - id(bat_dispower_today).state )' ]                
+                - lvgl.label.update:
+                    id: tot_bat_power_text
+                    text:
+                      format: '%.2fMWH'
+                      args: [ '(id(bat_chpower_total).state - id(bat_dispower_total).state ) / 1000 ' ]
+
+                - lvgl.page.show:
+                    id: main_page
+                    animation: FADE_OUT # move_right
+                    time: 100ms            
+                - lvgl.page.show:
+                    id: energy_page
+                    animation: FADE_IN # move_right
+                    time: 100ms   
+
+    - id: energy_page
+      widgets:   
+        - obj: 
+            id: bg_rect_energy
+            align: TOP_LEFT
+            width: 800
+            height: 480
+            pad_all: 6
+            radius: 0
+            bg_color: 0x0f111a
+            bg_grad_color: 0x000000
+            bg_grad_dir: VER
+            bg_opa: 100%
+            border_opa: TRANSP        
+            layout: # enable the GRID layout 
+              type: GRID # split the rows and the columns
+              grid_columns: [FR(130), FR(130), FR(130), FR(130), FR(130), FR(130)] # 8 columns divided in pixels, plan is a 2x5 columns divided in one 3x5 and one 5x5
+              grid_rows: [FR(80), FR(80), FR(80), FR(80), FR(80), FR(80)] # 6 rows divided in pixels
+            widgets:
+              - button:
+                  grid_cell_row_pos: 5
+                  grid_cell_column_pos: 0
+                  grid_cell_column_span: 2 # column 0,1,2 span about half the screen (80+80+215)
+                  grid_cell_x_align: START
+                  grid_cell_y_align: END   
+                  align: BOTTOM_LEFT
+                  on_click:
+                    then:
+                      - lvgl.page.show:
+                          id: energy_page
+                          animation: FADE_OUT # move_right
+                          time: 100ms            
+                      - lvgl.page.show:
+                          id: main_page
+                          animation: FADE_IN # move_right
+                          time: 100ms            
+                  widgets:
+                  - label: 
+                      text: "\U000F0311\U000F02DC"
+              - label:
+                  text_color: my_gray
+                  text_align: LEFT
+                  text_font: roboto_28
+                  text: "Today:"
+                  grid_cell_row_pos: 0
+                  grid_cell_column_pos: 1
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER               
+              - label:
+                  text_color: my_gray
+                  text_font: roboto_28
+                  text_align: LEFT
+                  text: "Total:"
+                  grid_cell_row_pos: 0
+                  grid_cell_column_pos: 2
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER  
+              - label:
+                  id: td_pv_power_icon
+                  text_color: my_gray
+                  text_align: LEFT
+                  text: "\U000F1A73"
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER  
+              - label:
+                  id: td_pv_power_text
+                  text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 1 
+                  grid_cell_x_align: END
+                  grid_cell_y_align: CENTER                  
+              - label:
+                  id: tot_pv_power_text
+                  text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 2 
+                  grid_cell_x_align: END
+                  grid_cell_y_align: CENTER                  
+              - label:
+                  id: td_load_power_icon
+                  #text_font: roboto_28
+                  text_align: LEFT
+                  text_color: my_gray #0x00FF00
+                  text: "\U000F0F9C"
+                  grid_cell_row_pos: 2
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: td_load_power_text
+                  text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  grid_cell_row_pos: 2
+                  grid_cell_column_pos: 1 
+                  grid_cell_x_align: END
+                  grid_cell_y_align: CENTER                  
+              - label:
+                  id: tot_load_power_text
+                  text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  grid_cell_row_pos: 2
+                  grid_cell_column_pos: 2 
+                  grid_cell_x_align: END
+                  grid_cell_y_align: CENTER                  
+              - label:
+                  id: td_grid_power_icon
+                  #text_font: roboto_28
+                  text_align: LEFT
+                  text: "\U000F192D"
+                  text_color: my_gray
+                  grid_cell_row_pos: 3
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: td_grid_power_text
+                  text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  grid_cell_row_pos: 3
+                  grid_cell_column_pos: 1 
+                  grid_cell_x_align: END
+                  grid_cell_y_align: CENTER                  
+              - label:
+                  id: tot_grid_power_text
+                  text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  grid_cell_row_pos: 3
+                  grid_cell_column_pos: 2 
+                  grid_cell_x_align: END
+                  grid_cell_y_align: CENTER                  
+              - label:
+                  id: td_bat_power_icon
+                  text_align: LEFT
+                  text_color: my_gray #0x00FF00
+                  text: "\U000F0084"
+                  grid_cell_row_pos: 4
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: CENTER
+                  grid_cell_y_align: CENTER
+              - label:
+                  id: td_bat_power_text
+                  text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  grid_cell_row_pos: 4
+                  grid_cell_column_pos: 1 
+                  grid_cell_x_align: END
+                  grid_cell_y_align: CENTER                  
+              - label:
+                  id: tot_bat_power_text
+                  text_font: roboto_28
+                  text_color: my_gray
+                  text_align: LEFT
+                  grid_cell_row_pos: 4
+                  grid_cell_column_pos: 2 
+                  grid_cell_x_align: END
+                  grid_cell_y_align: CENTER   
+    # ## Might use for later with climate control ###
+    #     - obj:
+    #         align: TOP_RIGHT
+    #         x: 100
+    #         y: 60
+    #         layout:
+    #           type: FLEX
+    #           flex_flow: ROW
+    #           flex_align_cross: CENTER
+    #         width: SIZE_CONTENT
+    #         height: SIZE_CONTENT
+    #         widgets:
+    #           - button:
+    #               id: spin_down
+    #               on_click:
+    #                 - lvgl.spinbox.decrement: spinbox_id
+    #               widgets:
+    #                 - label:
+    #                       text: "-"
+    #           - spinbox:
+    #               id: spinbox_id
+    #               align: CENTER
+    #               # text_align: CENTER
+    #               width: 150
+    #               range_from: 15
+    #               range_to: 35
+    #               step: 0.5
+    #               rollover: false
+    #               digits: 3
+    #               decimal_places: 1
+    #               on_value:
+    #                 then:
+    #                   - homeassistant.action:
+    #                       action: climate.set_temperature
+    #                       data:
+    #                         temperature: !lambda return x;
+    #                         entity_id: climate.climate_system_s1
+    #           - button:
+    #               id: spin_up
+    #               on_click:
+    #                 - lvgl.spinbox.increment: spinbox_id
+    #               widgets:
+    #                 - label:
+    #                     text: "+"
+
+    # ## Might use later with the car chargers ### 
+    #     - animimg:
+    #         x: 760
+    #         y: 8
+    #         id: niro_charging
+    #         src: [
+    #           batt_empty,
+    #           batt_10,
+    #           batt_20,
+    #           batt_30,
+    #           batt_40,
+    #           batt_50,
+    #           batt_60,
+    #           batt_70,
+    #           batt_80,
+    #           batt_90,
+    #           batt_full
+    #           ]
+    #         duration: 2100ms
+
+        # - animimg:
+        #     x: 760
+        #     y: 60
+        #     id: optima_charging
+        #     src: [
+        #       batt_empty,
+        #       batt_10,
+        #       batt_20,
+        #       batt_30,
+        #       batt_40,
+        #       batt_50,
+        #       batt_60,
+        #       batt_70,
+        #       batt_80,
+        #       batt_90,
+        #       batt_full
+        #       ]
+        #     duration: 2100ms 
+
+    - id: test_page
+      widgets:   
+        - obj: 
+            id: bg_rect_test1
+            x: 200
+            align: TOP_LEFT
+            width: 100
+            height: 480
+            pad_all: 6
+            radius: 0
+            bg_color: 0xffd6a5
+            bg_grad_color: 0xaee2ff
+            bg_grad_dir: VER
+            bg_opa: 100%
+            border_opa: TRANSP
+
+        - obj: 
+            id: bg_rect_test2
+            x: 350
+            align: TOP_LEFT
+            width: 100
+            height: 480
+            pad_all: 6
+            radius: 0
+            bg_color: 0x89cff0
+            bg_grad_color: 0xffffff
+            bg_grad_dir: VER
+            bg_opa: 100%
+            border_opa: TRANSP            
+        - obj: 
+            id: bg_rect_test3
+            align: TOP_LEFT
+            x: 500
+            width: 100
+            height: 480
+            pad_all: 6
+            radius: 0
+            bg_color: 0xffa07a
+            bg_grad_color: 0x1e3c72
+            bg_grad_dir: VER
+            bg_opa: 100%
+            border_opa: TRANSP            
+        - obj: 
+            id: bg_rect_test4
+            x: 650
+            align: TOP_LEFT
+            width: 100
+            height: 480
+            pad_all: 6
+            radius: 0
+            bg_color: 0x0f111a
+            bg_grad_color: 0x000000
+            bg_grad_dir: VER
+            bg_opa: 100%
+            border_opa: TRANSP                        
+
+        - button:
+            align: BOTTOM_LEFT
+            on_click:
+              then:
+                - lvgl.page.show:
+                    id: test_page
+                    animation: FADE_OUT # move_right
+                    time: 100ms            
+                - lvgl.page.show:
+                    id: main_page
+                    animation: FADE_IN # move_right
+                    time: 100ms            
+            widgets:
+            - label: 
+                text: "\U000F0311\U000F02DC"
+  on_idle:
+    - timeout: 30s
+      then:
+        - lvgl.page.show: main_page
+    # - timeout: 60s
+    #   then:
+    #     - switch.turn_off: lcdbacklight 
+    #     - lvgl.pause:

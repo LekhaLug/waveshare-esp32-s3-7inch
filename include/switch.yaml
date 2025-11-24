@@ -1,0 +1,126 @@
+### Switch
+switch:
+  - platform: restart
+    name: "Restart"
+    id: device_restart
+
+  - platform: factory_reset
+    name: Restart with Factory Default Settings  
+
+#   - platform: safe_mode
+#     name: Use Safe Mode
+#     id: device_safe_mode
+    
+  - platform: gpio
+    id: lcdbacklight
+    name: lcdbacklight
+    pin:
+      ch422g: ch422g_hub
+      number: 2
+      mode:
+        output: true
+      inverted: false
+    restore_mode: ALWAYS_ON
+
+  - platform: template
+    name: Antiburn
+    id: switch_antiburn
+    icon: mdi:television-shimmer
+    optimistic: true
+    entity_category: "config"
+    turn_on_action:
+      - logger.log: "Starting Antiburn"
+      - if:
+          condition: lvgl.is_paused
+          then:
+            - lvgl.resume:
+            - lvgl.widget.redraw:
+      - lvgl.pause:
+          show_snow: true
+    turn_off_action:
+      - logger.log: "Stopping Antiburn"
+      - if:
+          condition: lvgl.is_paused
+          then:
+            - lvgl.resume:
+            - lvgl.widget.redraw:
+
+  - platform: template
+    name: HA_thermostat_bridge switch
+    id: switch_thermostat
+    optimistic: true
+    #restore_mode: ALWAYS_OFF
+    #entity_category: "config"
+    turn_on_action:
+      - homeassistant.service:
+          service: climate.set_hvac_mode
+          data:
+            entity_id: ${climate_entity}
+            hvac_mode: "heat"
+      - lvgl.widget.update:
+          id: btn_thermostat_sw
+          state:
+            checked: true
+      - lambda: |-
+          ESP_LOGI("SET HVAC_MODE ", "HEAT");                     
+
+    turn_off_action:
+      - homeassistant.service:
+          service: climate.set_hvac_mode
+          data:
+            entity_id: ${climate_entity}
+            hvac_mode: "off"
+      - lvgl.widget.update:
+          id: btn_thermostat_sw
+          state:
+            checked: false
+      - lambda: |-
+          ESP_LOGI("SET HVAC_MODE ", "OFF");                     
+
+# Проміжний перемикач для зв'язку з HA
+
+  - platform: homeassistant
+    name: "HA Bridge Switch water pump"
+    id: ha_sw_water_pump
+    entity_id: switch.vimikach_nasosika
+    # Синхронізація стану назад до LVGL
+    on_turn_on:
+      - lvgl.widget.update:
+          id: btn_pump_switch
+          state:
+            checked: true
+    on_turn_off:
+      - lvgl.widget.update:
+          id: btn_pump_switch
+          state:
+            checked: false
+
+
+  - platform: homeassistant
+    name: "HA Bridge Switch Boiler"
+    id: ha_sw_boiler
+    entity_id: switch.vimikach_boilera
+    on_turn_on:
+      - lvgl.widget.update:
+          id: btn_boiler
+          state:
+            checked: true
+    on_turn_off:
+      - lvgl.widget.update:
+          id: btn_boiler
+          state:
+            checked: false
+
+  - platform: template
+    id: "thermo_switch"
+    name: "Gas Boiler Relay"
+    icon: "mdi:power-plug"
+    optimistic: true
+    turn_on_action:
+      - output.turn_on: thermo_relay_pin
+      - lambda: |-
+          ESP_LOGI("GAS BOILER RELAY"," Action: ON");
+    turn_off_action:
+      - output.turn_off: thermo_relay_pin
+      - lambda: |-
+          ESP_LOGI("GAS BOILER RELAY"," Action: OFF");

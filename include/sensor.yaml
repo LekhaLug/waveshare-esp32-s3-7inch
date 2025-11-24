@@ -1,0 +1,231 @@
+### Sensors
+sensor:
+  ## WiFi
+  - platform: wifi_signal
+    name: $friendly_devicename signal strength
+    id: wifi_signal_sensor
+    update_interval: 120s
+
+  ## Uptime
+  - platform: uptime
+    name: $friendly_devicename run time
+    id: uptime_sensor
+    update_interval: 120s
+    type: seconds
+
+  ## Indoor temperature
+  - platform: homeassistant
+    id: indoor_temperature
+    entity_id: sensor.temp_1_temperature
+#    attribute: current_temperature
+    on_value:
+      - lvgl.label.update:
+          id: indoor_temperature_text
+          text:
+            format: "%.1f°C"
+            args: [ 'x' ]
+
+  ## Indoor temperature 2
+  - platform: homeassistant
+    id: indoor_temperature2
+    entity_id: sensor.temp_2_temperature
+    on_value:
+      - lvgl.label.update:
+          id: indoor_temperature_text2
+          text:
+            format: "%.1f°C"
+            args: [ 'x' ]
+
+  ## Indoor Humidity
+  - platform: homeassistant
+    id: indoor_humidity
+    entity_id: sensor.temp_1_humidity
+#    attribute: current_temperature
+    on_value:
+      - lvgl.label.update:
+          id: indoor_humidity_text
+          text:
+            format: "%.0f%%"
+            args: [ 'x' ]
+
+  ## Indoor Humidity 2
+  - platform: homeassistant
+    id: indoor_humidity2
+    entity_id: sensor.temp_2_humidity
+#    attribute: current_temperature
+    on_value:
+      - lvgl.label.update:
+          id: indoor_humidity_text2
+          text:
+            format: "%.0f%%"
+            args: [ 'x' ]
+
+  ## Power usage
+  - platform: homeassistant
+    id: grid_power_sensor
+    entity_id: sensor.inverter_grid_power
+
+  - platform: homeassistant
+    id: grid_voltage_sensor
+    entity_id: sensor.inverter_grid_l1_voltage
+
+  ## Power usage
+  - platform: homeassistant
+    id: load_power_sensor
+    entity_id: sensor.inverter_load_power
+   
+  ## Power usage
+  - platform: homeassistant
+    id: bat_power_sensor
+    entity_id: sensor.inverter_battery_power
+
+  - platform: homeassistant
+    id: bat_voltage_sensor
+    entity_id: sensor.inverter_battery_voltage
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: bat_voltage_text
+            text:
+              format: "%.1fV"
+              args: [ 'x' ]
+
+  ## Power usage
+  - platform: homeassistant
+    id: pv_power_sensor
+    entity_id: sensor.inverter_pv_power
+
+  - platform: homeassistant
+    id: pv_power_today
+    entity_id: sensor.inverter_today_production
+  - platform: homeassistant
+    id: load_power_today
+    entity_id: sensor.inverter_today_load_consumption
+  - platform: homeassistant
+    id: grid_power_today
+    entity_id: sensor.inverter_today_energy_import
+  - platform: homeassistant
+    id: bat_chpower_today
+    entity_id: sensor.inverter_today_battery_charge
+  - platform: homeassistant
+    id: bat_dispower_today
+    entity_id: sensor.inverter_today_battery_discharge
+  - platform: homeassistant
+    id: pv_power_total
+    entity_id: sensor.inverter_total_production
+  - platform: homeassistant
+    id: load_power_total
+    entity_id: sensor.inverter_total_load_consumption
+  - platform: homeassistant
+    id: grid_power_total
+    entity_id: sensor.inverter_total_energy_import
+  - platform: homeassistant
+    id: bat_chpower_total
+    entity_id: sensor.inverter_total_battery_charge 
+  - platform: homeassistant
+    id: bat_dispower_total
+    entity_id: sensor.inverter_total_battery_discharge 
+
+  - platform: homeassistant
+    id: weather_temp
+    entity_id: weather.forecast_home
+    attribute: temperature
+    name: "Forecasted Temperature"
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: outdoor_temperature_text
+            text:
+              format: "%.1f°C"
+              args: [ 'x' ]  
+
+  ## Outdoor Humidity
+  - platform: homeassistant
+    id: outdoor_humidity
+    entity_id: weather.forecast_home
+    attribute: humidity
+    name: "Forecasted Humidity"
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: outdoor_humidity_text
+            text:
+              format: "%.0f%%"
+              args: [ 'x' ]  
+
+  # - platform: homeassistant
+  #   id: ha_humidity
+  #   entity_id: sensor.temp_1_humidity
+  #   on_value:
+  #     then:
+  #       - lvgl.label.update:
+  #           id: humidity_value
+  #           text:
+  #             format: "%.1f%"
+  #             args: [ 'x' ]
+  #           #text: !lambda 'return (String((int)x) + "%").c_str();'
+
+  - platform: homeassistant
+    id: ha_target_temp
+    entity_id: ${climate_entity}
+    attribute: temperature
+    unit_of_measurement: "°C" # Or "°F", depending on your setup
+    device_class: temperature
+    #internal: true
+    on_value:
+      - lvgl.label.update:
+            id: thermostat_target_temp 
+            text:
+              format: '%.1f °C'
+              args: [ 'x' ]
+      - lambda: |-
+          id(target_temp) = x;
+          // ESP_LOGI("Get HA target_temp ", "%.1f °C", x);        
+
+
+
+
+  ## NOT IN USE ##
+  # Climate control
+
+  # 1. Внутрішня пам'ять (Internal SRAM)
+  - platform: template
+    name: "Вільна RAM (Внутрішня)"
+    id: free_internal_ram
+    unit_of_measurement: "kB"
+    accuracy_decimals: 1
+    state_class: measurement
+    device_class: data_size
+    update_interval: 60s
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_ram
+            text:
+              format: "%.1fkb" 
+              args: [ 'x' ]
+    # Функція ESP-IDF для Internal SRAM
+    lambda: |-
+      return (float) heap_caps_get_free_size(MALLOC_CAP_INTERNAL) / 1024.0;
+      
+  # 2. Зовнішня пам'ять (External PSRAM / SPIRAM)
+  - platform: template
+    name: "Вільна RAM (Зовнішня PSRAM)"
+    id: free_external_ram
+    unit_of_measurement: "kB"
+    accuracy_decimals: 1
+    state_class: measurement
+    device_class: data_size
+    update_interval: 60s
+    # Функція ESP-IDF для External PSRAM
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_psram 
+            text:
+              format: "%.1fkb" 
+              args: [ 'x' ]
+    lambda: |-
+      return (float) heap_caps_get_free_size(MALLOC_CAP_SPIRAM) / 1024.0;
+
+

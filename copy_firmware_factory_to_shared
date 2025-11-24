@@ -1,0 +1,1 @@
+cp .esphome/build/waveshare-7inch/.pioenvs/waveshare-7inch/firmware*.bin /mnt/shared

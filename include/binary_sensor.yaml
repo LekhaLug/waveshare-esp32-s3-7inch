@@ -1,0 +1,17 @@
+
+# ### Binary sensors
+binary_sensor:
+  - platform: homeassistant
+    id: ha_switch_relaythermo
+    entity_id: switch.relaythermo  # замени на свой ID
+    internal: true
+    on_press:
+      then:
+        - lvgl.label.update:
+            id: thermostat_target_temp            
+            text_color: my_red 
+    on_release:
+      then:
+        - lvgl.label.update:
+            id: thermostat_target_temp            
+            text_color: my_gray
