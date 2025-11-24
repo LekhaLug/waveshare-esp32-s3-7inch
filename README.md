@@ -4,7 +4,7 @@ ESPHome code to use for your Waveshare-ESPHome-LVGL-tinkering.
 
 ## My project
 <!--img align="right" src="overview.png" alt="overview" width="300"/-->
-<img src="images\example_v2.png" alt="overview" width="80%"/>
+<img src="images\example_v3.jpg" alt="overview" width="80%"/>
 
 Only one page, nothing fancy, but examples with this board and ESPHome together with LVGL are scarse and far apart, so I thought I would share my project. 
 
