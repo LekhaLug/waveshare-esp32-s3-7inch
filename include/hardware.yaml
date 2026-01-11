@@ -46,11 +46,19 @@ esphome:
   # on_boot:
   #   priority: -100
   #   then:
-  #     - delay: 10min
   #     - lambda: |-
-  #         if (id(temp_sensor).state == NAN) {
-  #           ESP.restart();
+  #         auto mode = id(climate.thermostat).mode;
+  #         if (mode == climate::CLIMATE_MODE_HEAT) {
+  #           ESP_LOGI("main", "HVAC mode при старті: HEAT");
+  #         } else if (mode == climate::CLIMATE_MODE_COOL) {
+  #           ESP_LOGI("main", "HVAC mode при старті: COOL");
+  #         } else if (mode == climate::CLIMATE_MODE_OFF) {
+  #           ESP_LOGI("main", "HVAC mode при старті: OFF");
+  #         } else {
+  #           ESP_LOGI("main", "HVAC mode при старті: інший");
   #         }
+
+
 
  
 ### Enable logging

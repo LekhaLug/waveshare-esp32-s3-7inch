@@ -82,12 +82,23 @@ sensor:
   - platform: homeassistant
     id: bat_voltage_sensor
     entity_id: sensor.inverter_battery_voltage
+    # on_value:
+    #   then:
+    #     - lvgl.label.update:
+    #         id: bat_voltage_text
+    #         text:
+    #           format: "%.1fV"
+    #           args: [ 'x' ]
+
+  - platform: homeassistant
+    id: bat_percent_sensor
+    entity_id: sensor.inverter_battery
     on_value:
       then:
         - lvgl.label.update:
-            id: bat_voltage_text
+            id: bat_percent_text
             text:
-              format: "%.1fV"
+              format: "%.0f%%"
               args: [ 'x' ]
 
   ## Power usage

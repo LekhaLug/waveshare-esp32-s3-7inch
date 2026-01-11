@@ -61,6 +61,9 @@ switch:
           id: btn_thermostat_sw
           state:
             checked: true
+      - lvgl.label.update:
+          id: thermostat_target_temp            
+          text_color: my_white
       - lambda: |-
           ESP_LOGI("SET HVAC_MODE ", "HEAT");                     
 
@@ -74,6 +77,9 @@ switch:
           id: btn_thermostat_sw
           state:
             checked: false
+      - lvgl.label.update:
+          id: thermostat_target_temp            
+          text_color: my_gray
       - lambda: |-
           ESP_LOGI("SET HVAC_MODE ", "OFF");                     
 
@@ -118,9 +124,15 @@ switch:
     optimistic: true
     turn_on_action:
       - output.turn_on: thermo_relay_pin
+      - lvgl.label.update:
+          id: thermostat_target_temp            
+          text_color: my_yellow
       - lambda: |-
           ESP_LOGI("GAS BOILER RELAY"," Action: ON");
     turn_off_action:
       - output.turn_off: thermo_relay_pin
+      - lvgl.label.update:
+          id: thermostat_target_temp            
+          text_color: my_white
       - lambda: |-
           ESP_LOGI("GAS BOILER RELAY"," Action: OFF");

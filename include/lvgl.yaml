@@ -119,6 +119,7 @@ lvgl:
               type: GRID # split the rows and the columns
               grid_columns: [FR(80), FR(80), FR(80), FR(145), FR(83), FR(83), FR(83), FR(83), FR(83),] # 8 columns divided in pixels, plan is a 2x5 columns divided in one 3x5 and one 5x5
               grid_rows: [FR(85), FR(146), FR(83), FR(83), FR(83)] # 5 rows divided in pixels
+              #multiple_widgets_per_cell: true
             widgets:
               # 1st Column 3x5 ## Remeber columns and rows numbering start at 0 
               - label:
@@ -233,16 +234,16 @@ lvgl:
                   grid_cell_y_align: CENTER
                   text: "X°C"         
                   
-              - led:
-                  id: led_thermostat_status
-                  align: CENTER
-                  color: 0x708090
-                  brightness: 70%     
-                  grid_cell_row_pos: 3
-                  grid_cell_column_pos: 4
-                  grid_cell_column_span: 3
-                  grid_cell_x_align: START
-                  grid_cell_y_align: CENTER
+              # - led:
+              #     id: led_thermostat_status
+              #     align: CENTER
+              #     color: 0x708090
+              #     brightness: 70%     
+              #     grid_cell_row_pos: 3
+              #     grid_cell_column_pos: 4
+              #     grid_cell_column_span: 3
+              #     grid_cell_x_align: START
+              #     grid_cell_y_align: CENTER
 
               ## decrease temp
               - button:
@@ -302,14 +303,14 @@ lvgl:
                           switch.is_on: switch_thermostat
                         then:
                           - switch.turn_off: switch_thermostat
-                          - lvgl.led.update:
-                              id: led_thermostat_status
-                              color: 0x708090
+                          # - lvgl.led.update:
+                          #     id: led_thermostat_status
+                          #     color: 0x708090
                         else:
                           - switch.turn_on: switch_thermostat
-                          - lvgl.led.update:
-                              id: led_thermostat_status
-                              color: 0xFF0000
+                          # - lvgl.led.update:
+                          #     id: led_thermostat_status
+                          #     color: 0xFF0000
 
                       # - lambda: |-
                       #     if (id(switch_thermostat).state) {
@@ -476,15 +477,13 @@ lvgl:
               type: GRID # split the rows and the columns into a 2x4 grid
               grid_columns: [FR(1), FR(1)] # 2 columns equal 
               grid_rows: [FR(1), FR(1)] #  rows equal
+              multiple_widgets_per_cell: true
             widgets: 
               - arc:
                   id : pv_power_slider
                   adjustable: False
                   max_value: 6000
-                  grid_cell_row_pos: 0
-                  grid_cell_column_pos: 0
-                  grid_cell_x_align: CENTER
-                  grid_cell_y_align: CENTER
+                  align: CENTER
               - label:
                   id: pv_power_icon 
                   #text_font: roboto_28
@@ -503,18 +502,10 @@ lvgl:
                   grid_cell_column_pos: 0
                   grid_cell_x_align: CENTER
                   grid_cell_y_align: END
-              # - label:
-              #     text_font: roboto_28
-              #     id: supply_temp_text # Supply temp
-              #     text_align: LEFT
               - arc:
                   id : bat_power_slider
                   max_value: 6000
                   adjustable: False
-              # - label:
-              #     text_font: roboto_28
-              #     id: brine_in_temp_text # Brine in
-              #     text_align: LEFT
                   grid_cell_row_pos: 1
                   grid_cell_column_pos: 0
                   grid_cell_x_align: CENTER
@@ -546,14 +537,19 @@ lvgl:
                   grid_cell_column_pos: 0
                   grid_cell_x_align: END
                   grid_cell_y_align: end
+              - label:
+                  id: bat_percent_text # Brine out
+                  text_font: montserrat_12 # roboto_28
+                  text_align: RIGHT
+                  text_color: my_white
+                  grid_cell_row_pos: 1
+                  grid_cell_column_pos: 0
+                  grid_cell_x_align: END
+                  grid_cell_y_align: START
               - arc:
                   id : grid_power_slider
                   max_value: 6000
                   adjustable: False
-              # - label:
-              #     text_font: roboto_28
-              #     id: compressor_frequency_text # Compressor frequency
-              #     text_align: LEFT
                   grid_cell_row_pos: 0
                   grid_cell_column_pos: 1 
                   grid_cell_x_align: CENTER
@@ -594,15 +590,10 @@ lvgl:
                   grid_cell_column_pos: 1
                   grid_cell_x_align: END
                   grid_cell_y_align: START
-
               - arc:
                   id : load_power_slider
                   max_value: 6000
                   adjustable: False
-              # - label:
-              #     text_font: roboto_28
-              #     id: degree_minutes_text # Degree minutes... needs some extra space, can go below -1000 and take up 5 characters + symbol and space
-              #     text_align: LEFT
                   grid_cell_row_pos: 1
                   grid_cell_column_pos: 1
                   grid_cell_x_align: CENTER
@@ -704,6 +695,7 @@ lvgl:
               type: GRID # split the rows and the columns
               grid_columns: [FR(130), FR(130), FR(130), FR(130), FR(130), FR(130)] # 8 columns divided in pixels, plan is a 2x5 columns divided in one 3x5 and one 5x5
               grid_rows: [FR(80), FR(80), FR(80), FR(80), FR(80), FR(80)] # 6 rows divided in pixels
+              #multiple_widgets_per_cell: true
             widgets:
               - button:
                   grid_cell_row_pos: 5

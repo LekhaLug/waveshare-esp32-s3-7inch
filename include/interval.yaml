@@ -9,10 +9,10 @@ interval:
             ? lv_color_hex(0x00FF00)   
             : lv_color_hex(0x708090); 
             //FF0000
-          // RGB565 → RGB888 конвертація
-          red   = (lvcol.ch.red   * 255 + 15) / 31;  // 5 біт → 8 біт
-          green = (((lvcol.ch.green_h << 3) | lvcol.ch.green_l) * 255 + 31) / 63; // 6 біт → 8 біт
-          blue  = (lvcol.ch.blue  * 255 + 15) / 31;  // 5 біт → 8 біт
+          // RGB565 → RGB888 convertion
+          red   = (lvcol.ch.red   * 255 + 15) / 31;  // 5 bit → 8 bit
+          green = (((lvcol.ch.green_h << 3) | lvcol.ch.green_l) * 255 + 31) / 63; // 6 bit → 8 bit
+          blue  = (lvcol.ch.blue  * 255 + 15) / 31;  // 5 bit → 8 bit
           bgcolor = esphome::Color(red, green, blue);
           lv_obj_set_style_text_color(
             id(grid_power_icon), bgcolor,
@@ -29,33 +29,36 @@ interval:
           lvcol = id(pv_power_sensor).state > 20
             ? lv_color_hex(0xFFFF00)
             : lv_color_hex(0xCCCCCC);
-          // RGB565 → RGB888 конвертація
-          red   = (lvcol.ch.red   * 255 + 15) / 31;  // 5 біт → 8 біт
-          green = (((lvcol.ch.green_h << 3) | lvcol.ch.green_l) * 255 + 31) / 63; // 6 біт → 8 біт
-          blue  = (lvcol.ch.blue  * 255 + 15) / 31;  // 5 біт → 8 біт
+          // RGB565 → RGB888 convertion
+          red   = (lvcol.ch.red   * 255 + 15) / 31;  // 5 bit → 8 bit
+          green = (((lvcol.ch.green_h << 3) | lvcol.ch.green_l) * 255 + 31) / 63; // 6 bit → 8 bit
+          blue  = (lvcol.ch.blue  * 255 + 15) / 31;  // 5 bit → 8 bit
 
           bgcolor = esphome::Color(red, green, blue);
           lv_obj_set_style_text_color(
             id(pv_power_icon), bgcolor,
             LV_PART_MAIN | LV_STATE_DEFAULT
           );
-          // detect battery voltage and setbat icon color
-          float bat_voltage = id(bat_voltage_sensor).state;
-          if (bat_voltage > 53.5) {
+          // detect battery voltage and setbat text
+          //lv_label_set_text_fmt(bat_voltage_text, "%.1fV", id(bat_voltage_sensor).state );
+          // detect percent  and setbat icon color
+          float bat_percent = id(bat_percent_sensor).state;
+          //lv_label_set_text_fmt(bat_percent_text, "%.1f%", bat_percent );
+          if (bat_percent > 70.0 ) {
             lvcol = lv_color_hex(0x00FF00);      // green 
-          } else if (bat_voltage > 52.5) {
+          } else if (bat_percent > 60.0 ) {
             lvcol = lv_color_hex(0x88FF00);      // light green  
-          } else if (bat_voltage > 52.0) {
+          } else if (bat_percent > 40.0) {
             lvcol = lv_color_hex(0xFFFF00);      // yellow
-          } else if (bat_voltage > 51.0) {
+          } else if (bat_percent > 20.0) {
             lvcol = lv_color_hex(0xFF8800);      // orange
           } else {
             lvcol = lv_color_hex(0xFF0000);      // red
           };
-          // RGB565 → RGB888 конвертація
-          red   = (lvcol.ch.red   * 255 + 15) / 31;  // 5 біт → 8 біт
-          green = (((lvcol.ch.green_h << 3) | lvcol.ch.green_l) * 255 + 31) / 63; // 6 біт → 8 біт
-          blue  = (lvcol.ch.blue  * 255 + 15) / 31;  // 5 біт → 8 біт
+          // RGB565 → RGB888 convertion
+          red   = (lvcol.ch.red   * 255 + 15) / 31;  // 5 bit → 8 bit
+          green = (((lvcol.ch.green_h << 3) | lvcol.ch.green_l) * 255 + 31) / 63; // 6 bit → 8 bit
+          blue  = (lvcol.ch.blue  * 255 + 15) / 31;  // 5 bit → 8 bit
 
           bgcolor = esphome::Color(red, green, blue);
           lv_obj_set_style_text_color(
@@ -66,16 +69,20 @@ interval:
             id(bat_voltage_text), bgcolor,
             LV_PART_MAIN | LV_STATE_DEFAULT
           );          
+          lv_obj_set_style_text_color(
+            id(bat_percent_text), bgcolor,
+            LV_PART_MAIN | LV_STATE_DEFAULT
+          );   
           int rssi = id(wifi_signal_sensor).state;
           std::string icon;
           if (rssi > -60) {
-            icon = "\U000F0928";  // сильный
+            icon = "\U000F0928";  // strong
           } else if (rssi > -70) {
-            icon = "\U000F0925";  // средний
+            icon = "\U000F0925";  // medium
           } else if (rssi > -80) {
-            icon = "\U000F0922";  // слабый
+            icon = "\U000F0922";  // weak
           } else {
-            icon = "\U000F091F";  // нет сигнала
+            icon = "\U000F091F";  // no signal
           }
           lv_label_set_text(id(wifi_icon), icon.c_str());
 
@@ -100,6 +107,7 @@ interval:
             char buf[16];
             sprintf(buf, "%.2f", id(pv_power_sensor).state/1000);
             return std::string(buf);
+
       - lvgl.label.update:
           id: bat_power_text
           text: !lambda |-
@@ -112,6 +120,13 @@ interval:
           text: !lambda |-
             char buf[16];
             sprintf(buf, "%.2f", id(load_power_sensor).state/1000);
+            return std::string(buf);
+
+      - lvgl.label.update:
+          id: bat_voltage_text
+          text: !lambda |-
+            char buf[16];
+            sprintf(buf, "%.1fV", id(bat_voltage_sensor).state);
             return std::string(buf);
 
       - script.execute:
@@ -149,7 +164,7 @@ interval:
       - lvgl.arc.update:
           id : bat_power_slider
           value: !lambda |-
-              float power = id(bat_power_sensor).state;
+              float power = fabs(id(bat_power_sensor).state);
               return std::max(0.0f, std::min(6000.0f, power));
           indicator:
             arc_color: !lambda |-

@@ -1,4 +1,3 @@
-
 # ESP32-S3-Touch-LCD-7
 substitutions: !include include/substitutions.yaml
 
@@ -9,7 +8,7 @@ packages:
   interval: !include include/interval.yaml
   text_sensor: !include include/text_sensor.yaml
   sensor: !include include/sensor.yaml
-  binary_sensor: !include include/binary_sensor.yaml
+  # binary_sensor: !include include/binary_sensor.yaml
   switch: !include include/switch.yaml
 ##  online_image: !include include/online_image.yaml
 ##  select: !include include/select.yaml
